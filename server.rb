@@ -1,8 +1,22 @@
 require 'sinatra'
 
 get '/' do
-  @tasks = ['pay bills', 'buy milk', 'learn Ruby']
+  @tasks = File.readlines('tasks')
   erb :index
+end
+
+post '/tasks' do
+  # Read the input from the form the user filled out
+  task = params['task_name']
+
+  # Open the "tasks" file and append the task
+  File.open('tasks', 'a') do |file|
+    file.puts(task)
+  end
+
+  # Send the user back to the home page which shows
+  # the list of tasks
+  redirect '/'
 end
 
 # These lines can be removed since they are using the default values. They've
