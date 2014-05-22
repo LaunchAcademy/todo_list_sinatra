@@ -10,13 +10,20 @@
 
     <ul>
       <% @tasks.each do |task| %>
-        <li><%= task %></li>
+        <li>
+          <%= task["task_name"] %>
+          is due by
+          <%= task["due_date"] %>
+        </li>
       <% end %>
     </ul>
 
     <form action="/tasks" method="post">
       <label for="task_name">New Task:</label>
       <input type="text" id="task_name" name="task_name" />
+
+      <label for="due_date">Due Date:</label>
+      <input type="text" id="due_date" name="due_date" />
 
       <input type="submit" />
     </form>

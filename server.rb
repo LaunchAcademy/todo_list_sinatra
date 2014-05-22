@@ -1,25 +1,28 @@
 require 'sinatra'
+require 'pry'
+require 'csv'
+
+STORAGE = 'tasks.csv'
 
 get '/' do
-  @tasks = File.readlines('tasks')
+  @tasks = []
+  CSV.foreach(STORAGE, headers: true) do |row|
+    @tasks << row
+  end
+
   erb :index
 end
 
 post '/tasks' do
-  # Read the input from the form the user filled out
   task = params['task_name']
+  due_date = params['due_date']
 
-  # Open the "tasks" file and append the task
-  File.open('tasks', 'a') do |file|
-    file.puts(task)
+  File.open(STORAGE, 'a') do |file|
+    file.puts("#{task},#{due_date}")
   end
 
-  # Send the user back to the home page which shows
-  # the list of tasks
   redirect '/'
 end
 
-# These lines can be removed since they are using the default values. They've
-# been included to explicitly show the configuration options.
-set :views, File.dirname(__FILE__) + '/views'
-set :public_folder, File.dirname(__FILE__) + '/public'
+# set :views, File.dirname(__FILE__) + '/views'
+# set :public_folder, File.dirname(__FILE__) + '/public'
